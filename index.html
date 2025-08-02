@@ -1,0 +1,455 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Unlock My Fitness - Personalised Fitness & Nutrition Coaching</title>
+    <meta name="description" content="Tired of fad diets? Unlock a stronger, healthier you with personalised fitness and nutrition coaching based on science. Get your free consultation today.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-orange: #F9A826;
+            --dark-bg: #121212;
+            --text-light: #F5F5F5;
+            --text-secondary: #AAAAAA;
+            --card-bg: #1E1E1E;
+        }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            scroll-behavior: smooth;
+        }
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: var(--dark-bg);
+            color: var(--text-light);
+            line-height: 1.6;
+        }
+        .container {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        /* --- Navigation --- */
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 0;
+            position: fixed;
+            width: 100%;
+            background: rgba(18, 18, 18, 0.8);
+            backdrop-filter: blur(10px);
+            z-index: 100;
+        }
+        nav .logo img {
+            height: 50px;
+        }
+        nav ul {
+            display: flex;
+            list-style: none;
+        }
+        nav ul li {
+            margin-left: 30px;
+        }
+        nav ul li a {
+            color: var(--text-light);
+            text-decoration: none;
+            font-weight: 600;
+            transition: color 0.3s ease;
+        }
+        nav ul li a:hover {
+            color: var(--primary-orange);
+        }
+        .cta-button {
+            background-color: var(--primary-orange);
+            color: var(--dark-bg);
+            padding: 10px 25px;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 700;
+            transition: transform 0.3s ease;
+        }
+        .cta-button:hover {
+            transform: scale(1.05);
+        }
+        
+        /* --- Hero Section --- */
+        #home {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            text-align: center;
+            padding-top: 80px; /* Offset for nav */
+        }
+        #home .container {
+            max-width: 800px;
+        }
+        #home h1 {
+            font-size: 3.5rem;
+            font-weight: 700;
+            line-height: 1.2;
+            margin-bottom: 20px;
+        }
+        #home h1 span {
+            color: var(--primary-orange);
+        }
+        #home .tagline {
+            font-size: 1.2rem;
+            color: var(--text-secondary);
+            margin-bottom: 30px;
+        }
+        #home .cta-group a {
+            margin: 0 10px;
+        }
+
+        /* --- Generic Section Styling --- */
+        section {
+            padding: 80px 0;
+        }
+        .section-title {
+            text-align: center;
+            margin-bottom: 50px;
+            font-size: 2.5rem;
+            font-weight: 700;
+        }
+        .section-title span {
+            color: var(--primary-orange);
+        }
+
+        /* --- How It Works --- */
+        #how-it-works .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 30px;
+            text-align: center;
+        }
+        .step .icon {
+            font-size: 3rem;
+            color: var(--primary-orange);
+            margin-bottom: 15px;
+        }
+        .step h3 {
+            font-size: 1.3rem;
+            margin-bottom: 10px;
+        }
+        .step p {
+            color: var(--text-secondary);
+        }
+
+        /* --- Plans Section --- */
+        #plans .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            align-items: center;
+        }
+        .plan-card {
+            background-color: var(--card-bg);
+            padding: 30px;
+            border-radius: 10px;
+            border: 2px solid transparent;
+            transition: all 0.3s ease;
+        }
+        .plan-card.popular {
+            border-color: var(--primary-orange);
+            transform: scale(1.05);
+        }
+        .plan-card h3 {
+            font-size: 1.5rem;
+            color: var(--primary-orange);
+        }
+        .plan-card .price {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin: 15px 0;
+        }
+        .plan-card .price span {
+            font-size: 1rem;
+            font-weight: 400;
+            color: var(--text-secondary);
+        }
+        .plan-card ul {
+            list-style: none;
+            margin: 20px 0;
+        }
+        .plan-card ul li {
+            margin-bottom: 10px;
+            padding-left: 25px;
+            position: relative;
+        }
+        .plan-card ul li::before {
+            content: '✓';
+            color: var(--primary-orange);
+            position: absolute;
+            left: 0;
+            font-weight: bold;
+        }
+        .plan-card .cta-button {
+            display: block;
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        /* --- Results Section --- */
+        #results .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+        }
+        .testimonial-card {
+            background: var(--card-bg);
+            padding: 25px;
+            border-radius: 10px;
+        }
+        .testimonial-card p {
+            font-style: italic;
+            margin-bottom: 20px;
+        }
+        .testimonial-author {
+            display: flex;
+            align-items: center;
+        }
+        .testimonial-author img {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            margin-right: 15px;
+            object-fit: cover;
+        }
+        .author-info h4 {
+            margin: 0;
+            font-weight: 600;
+        }
+        .author-info span {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+
+        /* --- About Section --- */
+        #about .about-content {
+            display: flex;
+            align-items: center;
+            gap: 50px;
+        }
+        #about .about-text {
+            flex: 1;
+        }
+        #about .coach-image {
+            flex-basis: 300px;
+            text-align: center;
+        }
+        #about .coach-image img {
+            width: 250px;
+            height: 250px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 5px solid var(--primary-orange);
+        }
+
+        /* --- Contact Section --- */
+        #contact {
+            background-color: var(--card-bg);
+            text-align: center;
+        }
+        #contact .whatsapp-button {
+            display: inline-block;
+            background-color: #25D366;
+            color: white;
+            padding: 15px 35px;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 700;
+            font-size: 1.2rem;
+            transition: transform 0.3s ease;
+            margin-top: 20px;
+        }
+        #contact .whatsapp-button:hover {
+            transform: scale(1.05);
+        }
+        
+        /* --- Footer --- */
+        footer {
+            text-align: center;
+            padding: 30px 20px;
+            color: var(--text-secondary);
+        }
+
+        /* --- Responsive Design --- */
+        @media (max-width: 768px) {
+            nav ul { display: none; } /* Simple hide for MVP, can be replaced with hamburger menu */
+            #home h1 { font-size: 2.5rem; }
+            .section-title { font-size: 2rem; }
+            #about .about-content { flex-direction: column; }
+            .plan-card.popular { transform: scale(1); }
+        }
+    </style>
+</head>
+<body>
+
+    <nav>
+        <div class="container">
+            <a href="#home" class="logo"><img src="https://i.ibb.co/L5BPCW7/logo-white-bg.png" alt="Unlock My Fitness Logo"></a>
+            <ul>
+                <li><a href="#how-it-works">How It Works</a></li>
+                <li><a href="#plans">Plans</a></li>
+                <li><a href="#results">Results</a></li>
+                <li><a href="#about">About</a></li>
+                <li><a href="#contact" class="cta-button">Get Started</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <section id="home">
+        <div class="container">
+            <h1>Tired of Fad Diets? <br>Unlock Your Potential. <span>For Life.</span></h1>
+            <p class="tagline">We don't just tell you what to do — we teach you why it works. Sustainable fitness through science, not shortcuts.</p>
+            <div class="cta-group">
+                <a href="#contact" class="cta-button">Start Your Free Consultation</a>
+            </div>
+        </div>
+    </section>
+
+    <section id="how-it-works">
+        <div class="container">
+            <h2 class="section-title">Your Journey to <span>Sustainable Fitness</span></h2>
+            <div class="grid">
+                <div class="step">
+                    <div class="icon">1</div>
+                    <h3>Discovery & Goal Setting</h3>
+                    <p>We start with a detailed call to understand your lifestyle, challenges, and what you truly want to achieve.</p>
+                </div>
+                <div class="step">
+                    <div class="icon">2</div>
+                    <h3>Hyper-Personalised Plan</h3>
+                    <p>Receive a custom-built nutrition and workout plan that fits your life, not the other way around.</p>
+                </div>
+                <div class="step">
+                    <div class="icon">3</div>
+                    <h3>Guided Execution</h3>
+                    <p>Daily support and weekly check-ins via WhatsApp to keep you accountable, motivated, and on track.</p>
+                </div>
+                <div class="step">
+                    <div class="icon">4</div>
+                    <h3>Learn & Empower</h3>
+                    <p>We teach you the science behind the process, giving you the knowledge to maintain your results for life.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="plans" style="background-color: var(--card-bg);">
+        <div class="container">
+            <h2 class="section-title">Choose Your <span>Transformation</span> Plan</h2>
+            <div class="grid">
+                <div class="plan-card">
+                    <h3>Kickstarter</h3>
+                    <p class="price">₹14,999</p>
+                    <ul>
+                        <li>3-Month Program</li>
+                        <li>Personalised Nutrition Plan</li>
+                        <li>Custom Workout Routine</li>
+                        <li>Weekly Progress Check-ins</li>
+                        <li>WhatsApp Support</li>
+                    </ul>
+                    <a href="#contact" class="cta-button">Select Plan</a>
+                </div>
+                <div class="plan-card popular">
+                    <h3>Transformation</h3>
+                    <p class="price">₹24,999 <span>Best Value</span></p>
+                     <ul>
+                        <li>6-Month Program</li>
+                        <li>Personalised Nutrition Plan</li>
+                        <li>Custom Workout Routine</li>
+                        <li>Weekly Progress Check-ins</li>
+                        <li>Priority WhatsApp Support</li>
+                        <li>Dietary Flexibility Guide</li>
+                    </ul>
+                    <a href="#contact" class="cta-button">Select Plan</a>
+                </div>
+                <div class="plan-card">
+                    <h3>Lifestyle</h3>
+                    <p class="price">₹39,999</p>
+                     <ul>
+                        <li>12-Month Program</li>
+                        <li>Everything in Transformation</li>
+                        <li>Bi-Weekly Review Calls</li>
+                        <li>Advanced Habit Coaching</li>
+                        <li>Long-term Maintenance Plan</li>
+                    </ul>
+                    <a href="#contact" class="cta-button">Select Plan</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="results">
+        <div class="container">
+            <h2 class="section-title">Don't Just Take Our Word. <span>See The Results.</span></h2>
+            <div class="grid">
+                <div class="testimonial-card">
+                    <p>"I lost 12 kgs in 4 months without starving myself. The best part is I now know how to eat right. This wasn't a diet, it was an education."</p>
+                    <div class="testimonial-author">
+                        <img src="https://i.pravatar.cc/150?img=5" alt="Priya S.">
+                        <div class="author-info">
+                            <h4>Priya S.</h4>
+                            <span>IT Professional, Bengaluru</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="testimonial-card">
+                    <p>"As a software engineer, I barely had time. Abhist created a plan that fit my hectic schedule. I'm stronger, more energetic, and finally have a routine that sticks."</p>
+                    <div class="testimonial-author">
+                        <img src="https://i.pravatar.cc/150?img=12" alt="Rohan M.">
+                         <div class="author-info">
+                            <h4>Rohan M.</h4>
+                            <span>Software Engineer, Hyderabad</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="testimonial-card">
+                    <p>"Finally understood the 'why' behind nutrition. The constant support on WhatsApp was a game-changer for me. Highly recommended!"</p>
+                    <div class="testimonial-author">
+                         <img src="https://i.pravatar.cc/150?img=32" alt="Anjali K.">
+                         <div class="author-info">
+                            <h4>Anjali K.</h4>
+                            <span>Marketing Manager, Delhi</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <section id="about" style="background-color: var(--card-bg);">
+        <div class="container about-content">
+            <div class="about-text">
+                <h2 class="section-title" style="text-align: left; margin-bottom: 20px;">Meet <span>Your Coach</span></h2>
+                <p>Hi, I'm Abhist. As a certified fitness coach and a full-time software engineer, I understand the challenges of balancing a demanding career with health goals. My approach is rooted in science, efficiency, and empathy.</p><br>
+                <p>I started 'Unlock My Fitness' to cut through the noise of the fitness industry. My mission is to empower you with the knowledge and tools to build a healthy lifestyle that you can actually sustain, long after our coaching ends.</p>
+            </div>
+            <div class="coach-image">
+                <img src="https://i.pravatar.cc/300" alt="Coach Abhist Chauhan">
+            </div>
+        </div>
+    </section>
+
+    <section id="contact">
+        <div class="container">
+            <h2 class="section-title">Ready to Unlock Your Potential?</h2>
+            <p style="max-width: 600px; margin: 0 auto; color: var(--text-secondary);">Your transformation is one conversation away. Send me a message on WhatsApp for a free, no-obligation consultation call. Let's build your plan.</p>
+            <a href="https://wa.me/918178695177" target="_blank" class="whatsapp-button">Chat on WhatsApp</a>
+        </div>
+    </section>
+    
+    <footer>
+        <div class="container">
+            <p>&copy; 2025 Unlock My Fitness. All Rights Reserved.</p>
+        </div>
+    </footer>
+
+</body>
+</html>
