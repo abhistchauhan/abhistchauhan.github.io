@@ -713,4 +713,292 @@
                 <button class="cta-button" onclick="showPopup()" style="margin-right: 15px; font-size: 1.2rem; padding: 15px 35px;">
                     Get FREE Plan + Consultation
                 </button>
-                <a href="https://wa.me/918178695177" target="_blank" class
+                <a href="https://wa.me/918178695177" target="_blank" class="whatsapp-button" onclick="trackEvent('whatsapp_click', 'contact_section')">Chat on WhatsApp</a>
+            </div>
+        </div>
+    </section>
+    
+    <footer>
+        <div class="container">
+            <p>&copy; 2025 Unlock My Fitness. All Rights Reserved.</p>
+        </div>
+    </footer>
+
+    <script>
+        // Lead Generation & Analytics Script
+        
+        // Show popup after 30 seconds or on scroll
+        let popupShown = false;
+        
+        function showPopup() {
+            if (!popupShown) {
+                document.getElementById('leadPopup').style.display = 'flex';
+                popupShown = true;
+                trackEvent('popup_opened', 'manual');
+            }
+        }
+        
+        function closePopup() {
+            document.getElementById('leadPopup').style.display = 'none';
+        }
+        
+        // Auto-show popup after 30 seconds
+        setTimeout(() => {
+            if (!popupShown) {
+                showPopup();
+                trackEvent('popup_opened', 'auto_timer');
+            }
+        }, 30000);
+        
+        // Show popup on scroll (70% of page)
+        let scrollTriggered = false;
+        window.addEventListener('scroll', () => {
+            if (!scrollTriggered && !popupShown) {
+                const scrollPercent = (window.scrollY / (document.body.scrollHeight - window.innerHeight)) * 100;
+                if (scrollPercent > 70) {
+                    showPopup();
+                    scrollTriggered = true;
+                    trackEvent('popup_opened', 'scroll_trigger');
+                }
+            }
+        });
+        
+        // Form submission handler
+        document.getElementById('leadForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const submitBtn = document.getElementById('submitBtn');
+            const formData = new FormData(this);
+            
+            // Disable button and show loading
+            submitBtn.disabled = true;
+            submitBtn.textContent = 'Sending Your Plan...';
+            
+            // Get form data
+            const data = {
+                name: formData.get('name'),
+                email: formData.get('email'),
+                phone: formData.get('phone'),
+                goal: formData.get('goal'),
+                timestamp: new Date().toISOString(),
+                source: 'website_popup'
+            };
+            
+            // Track conversion
+            trackEvent('lead_submitted', 'popup_form');
+            
+            // Submit to Google Sheets (replace with your Apps Script URL)
+            submitToGoogleSheets(data)
+                .then(() => {
+                    // Success - show thank you message
+                    document.querySelector('.popup-content').innerHTML = `
+                        <h3 class="popup-title">🎉 Success! Check Your Email</h3>
+                        <div style="text-align: center; padding: 20px;">
+                            <p style="margin-bottom: 20px;">Your FREE fitness plan is on its way!</p>
+                            <p style="color: var(--text-secondary); margin-bottom: 25px;">
+                                I'll send you:<br>
+                                ✅ 7-Day Meal Prep Guide<br>
+                                ✅ No-Equipment Workout<br>
+                                ✅ Body Fat Calculator<br>
+                                ✅ Consultation booking link
+                            </p>
+                            <a href="https://wa.me/918178695177?text=Hi Abhist! I just downloaded the free fitness plan from your website. I'm interested in discussing my fitness goals." 
+                               target="_blank" 
+                               class="cta-button" 
+                               style="text-decoration: none; display: inline-block;"
+                               onclick="trackEvent('whatsapp_click', 'thank_you_page')">
+                                Chat on WhatsApp 💬
+                            </a>
+                            <p style="font-size: 0.9rem; color: var(--text-secondary); margin-top: 15px;">
+                                Can't find the email? Check your spam folder or WhatsApp me directly!
+                            </p>
+                        </div>
+                    `;
+                    
+                    // Auto-close after 10 seconds
+                    setTimeout(() => {
+                        closePopup();
+                    }, 10000);
+                })
+                .catch(() => {
+                    // Error handling
+                    submitBtn.disabled = false;
+                    submitBtn.textContent = 'Try Again';
+                    alert('Something went wrong. Please try WhatsApp instead!');
+                });
+        });
+        
+        // Google Sheets submission function
+        async function submitToGoogleSheets(data) {
+            // Replace this URL with your Google Apps Script Web App URL
+            const GOOGLE_SCRIPT_URL = 'YOUR_GOOGLE_APPS_SCRIPT_URL_HERE';
+            
+            try {
+                const response = await fetch(GOOGLE_SCRIPT_URL, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(data)
+                });
+                
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                
+                return await response.json();
+            } catch (error) {
+                console.error('Error submitting to Google Sheets:', error);
+                throw error;
+            }
+        }
+        
+        // Analytics tracking function
+        function trackEvent(eventName, eventCategory, eventLabel = '') {
+            // Google Analytics 4
+            if (typeof gtag !== 'undefined') {
+                gtag('event', eventName, {
+                    event_category: eventCategory,
+                    event_label: eventLabel
+                });
+            }
+            
+            // Facebook Pixel
+            if (typeof fbq !== 'undefined') {
+                fbq('track', 'CustomConversion', {
+                    event_name: eventName,
+                    event_category: eventCategory
+                });
+            }
+            
+            // Console log for debugging
+            console.log('Event tracked:', eventName, eventCategory, eventLabel);
+        }
+        
+        // Track page views and engagement
+        document.addEventListener('DOMContentLoaded', function() {
+            trackEvent('page_loaded', 'engagement');
+            
+            // Track scroll depth
+            let maxScroll = 0;
+            window.addEventListener('scroll', () => {
+                const scrollPercent = Math.round((window.scrollY / (document.body.scrollHeight - window.innerHeight)) * 100);
+                
+                if (scrollPercent > maxScroll) {
+                    maxScroll = scrollPercent;
+                    
+                    // Track milestone scrolls
+                    if (scrollPercent === 25 || scrollPercent === 50 || scrollPercent === 75 || scrollPercent === 100) {
+                        trackEvent('scroll_depth', 'engagement', scrollPercent + '%');
+                    }
+                }
+            });
+            
+            // Track time on page
+            let timeOnPage = 0;
+            setInterval(() => {
+                timeOnPage += 30;
+                if (timeOnPage === 60 || timeOnPage === 180 || timeOnPage === 300) {
+                    trackEvent('time_on_page', 'engagement', timeOnPage + 's');
+                }
+            }, 30000);
+        });
+        
+        // Click tracking for important elements
+        document.addEventListener('click', function(e) {
+            const target = e.target;
+            
+            // Track CTA button clicks
+            if (target.classList.contains('cta-button')) {
+                const buttonText = target.textContent.trim();
+                trackEvent('cta_click', 'conversion', buttonText);
+            }
+            
+            // Track plan selections
+            if (target.closest('.plan-card')) {
+                const planName = target.closest('.plan-card').querySelector('h3').textContent;
+                trackEvent('plan_viewed', 'conversion', planName);
+            }
+            
+            // Track navigation clicks
+            if (target.closest('nav a')) {
+                const navItem = target.textContent.trim();
+                trackEvent('navigation_click', 'engagement', navItem);
+            }
+        });
+        
+        // Exit intent popup (desktop only)
+        let exitIntentShown = false;
+        document.addEventListener('mouseleave', function(e) {
+            if (e.clientY < 0 && !exitIntentShown && !popupShown && window.innerWidth > 768) {
+                showPopup();
+                exitIntentShown = true;
+                trackEvent('popup_opened', 'exit_intent');
+            }
+        });
+        
+        // Mobile touch events for engagement
+        let touchStartTime = 0;
+        document.addEventListener('touchstart', function() {
+            touchStartTime = Date.now();
+        });
+        
+        document.addEventListener('touchend', function() {
+            const touchDuration = Date.now() - touchStartTime;
+            if (touchDuration > 500) { // Long press
+                trackEvent('long_press', 'mobile_engagement');
+            }
+        });
+        
+        // Close popup when clicking outside
+        document.getElementById('leadPopup').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closePopup();
+                trackEvent('popup_closed', 'interaction', 'click_outside');
+            }
+        });
+        
+        // Keyboard shortcuts
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                closePopup();
+                trackEvent('popup_closed', 'interaction', 'escape_key');
+            }
+        });
+        
+        // Dynamic content updates
+        function updateStats() {
+            const clientsCountEl = document.getElementById('clientsCount');
+            let currentCount = 500;
+            const targetCount = 523; // Update this periodically
+            
+            const interval = setInterval(() => {
+                currentCount += Math.floor(Math.random() * 3) + 1;
+                if (currentCount >= targetCount) {
+                    currentCount = targetCount;
+                    clearInterval(interval);
+                }
+                clientsCountEl.textContent = currentCount + '+';
+            }, 100);
+        }
+        
+        // Update stats on page load
+        setTimeout(updateStats, 2000);
+        
+        // Urgency timer (optional - for special offers)
+        function updateUrgencyBanner() {
+            const banner = document.querySelector('.urgency-banner');
+            const today = new Date();
+            const endOfMonth = new Date(today.getFullYear(), today.getMonth() + 1, 0);
+            const daysLeft = Math.ceil((endOfMonth - today) / (1000 * 60 * 60 * 24));
+            
+            if (daysLeft <= 10) {
+                banner.innerHTML = `🔥 URGENT: Only ${daysLeft} days left this month! Free Consultation + Plan Guide - Limited spots available!`;
+            }
+        }
+        
+        updateUrgencyBanner();
+    </script>
+
+</body>
+</html>
