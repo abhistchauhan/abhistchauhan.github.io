@@ -8,6 +8,31 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Analytics (Replace with your tracking IDs) -->
+    <!-- Google Analytics 4 -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=GA_MEASUREMENT_ID"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'GA_MEASUREMENT_ID');
+    </script>
+    
+    <!-- Facebook Pixel -->
+    <script>
+        !function(f,b,e,v,n,t,s)
+        {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+        n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+        if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+        n.queue=[];t=b.createElement(e);t.async=!0;
+        t.src=v;s=b.getElementsByTagName(e)[0];
+        s.parentNode.insertBefore(t,s)}(window,document,'script',
+        'https://connect.facebook.net/en_US/fbevents.js');
+        fbq('init', 'YOUR_PIXEL_ID');
+        fbq('track', 'PageView');
+    </script>
+
     <style>
         :root {
             --primary-orange: #F9A826;
@@ -15,6 +40,8 @@
             --text-light: #F5F5F5;
             --text-secondary: #AAAAAA;
             --card-bg: #1E1E1E;
+            --success-green: #10B981;
+            --warning-red: #EF4444;
         }
         * {
             margin: 0;
@@ -33,6 +60,135 @@
             margin: 0 auto;
             padding: 0 20px;
         }
+        
+        /* Lead Magnet Popup Overlay */
+        .popup-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            z-index: 1000;
+            display: none;
+            justify-content: center;
+            align-items: center;
+        }
+        .popup-content {
+            background: var(--dark-bg);
+            padding: 40px;
+            border-radius: 15px;
+            max-width: 500px;
+            width: 90%;
+            position: relative;
+            border: 2px solid var(--primary-orange);
+        }
+        .popup-close {
+            position: absolute;
+            top: 15px;
+            right: 20px;
+            background: none;
+            border: none;
+            color: var(--text-light);
+            font-size: 24px;
+            cursor: pointer;
+        }
+        .popup-title {
+            color: var(--primary-orange);
+            font-size: 1.8rem;
+            margin-bottom: 15px;
+            text-align: center;
+        }
+        .popup-subtitle {
+            color: var(--text-secondary);
+            margin-bottom: 25px;
+            text-align: center;
+        }
+        
+        /* Lead Form Styles */
+        .lead-form {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+        .form-group {
+            display: flex;
+            flex-direction: column;
+        }
+        .form-group label {
+            margin-bottom: 5px;
+            color: var(--text-light);
+            font-weight: 600;
+        }
+        .form-group input, .form-group select, .form-group textarea {
+            padding: 12px;
+            border: 1px solid #333;
+            border-radius: 8px;
+            background: var(--card-bg);
+            color: var(--text-light);
+            font-family: inherit;
+        }
+        .form-group input:focus, .form-group select:focus, .form-group textarea:focus {
+            outline: none;
+            border-color: var(--primary-orange);
+        }
+        .submit-btn {
+            background: var(--primary-orange);
+            color: var(--dark-bg);
+            padding: 15px;
+            border: none;
+            border-radius: 8px;
+            font-weight: 700;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+        }
+        .submit-btn:hover {
+            transform: scale(1.02);
+        }
+        .submit-btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+        
+        /* Stats Counter */
+        .stats-bar {
+            background: var(--card-bg);
+            padding: 20px 0;
+            text-align: center;
+        }
+        .stats-container {
+            display: flex;
+            justify-content: center;
+            gap: 50px;
+            flex-wrap: wrap;
+        }
+        .stat-item {
+            text-align: center;
+        }
+        .stat-number {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--primary-orange);
+        }
+        .stat-label {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+        
+        /* Urgency Banner */
+        .urgency-banner {
+            background: linear-gradient(45deg, var(--primary-orange), #ff8800);
+            color: var(--dark-bg);
+            text-align: center;
+            padding: 10px;
+            font-weight: 600;
+            position: fixed;
+            top: 0;
+            width: 100%;
+            z-index: 200;
+        }
+        
         /* --- Navigation --- */
         nav {
             display: flex;
@@ -41,9 +197,10 @@
             padding: 20px 0;
             position: fixed;
             width: 100%;
-            background: rgba(18, 18, 18, 0.8);
+            background: rgba(18, 18, 18, 0.95);
             backdrop-filter: blur(10px);
             z-index: 100;
+            top: 40px; /* Account for urgency banner */
         }
         nav .logo img {
             height: 50px;
@@ -72,6 +229,9 @@
             text-decoration: none;
             font-weight: 700;
             transition: transform 0.3s ease;
+            cursor: pointer;
+            border: none;
+            display: inline-block;
         }
         .cta-button:hover {
             transform: scale(1.05);
@@ -83,7 +243,7 @@
             display: flex;
             align-items: center;
             text-align: center;
-            padding-top: 80px; /* Offset for nav */
+            padding-top: 140px; /* Offset for nav + urgency banner */
         }
         #home .container {
             max-width: 800px;
@@ -102,8 +262,23 @@
             color: var(--text-secondary);
             margin-bottom: 30px;
         }
+        #home .cta-group {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
         #home .cta-group a {
-            margin: 0 10px;
+            margin: 0;
+        }
+        .secondary-cta {
+            background: transparent;
+            color: var(--text-light);
+            border: 2px solid var(--text-light);
+        }
+        .secondary-cta:hover {
+            background: var(--text-light);
+            color: var(--dark-bg);
         }
 
         /* --- Generic Section Styling --- */
@@ -280,35 +455,123 @@
 
         /* --- Responsive Design --- */
         @media (max-width: 768px) {
-            nav ul { display: none; } /* Simple hide for MVP, can be replaced with hamburger menu */
+            nav ul { display: none; }
             #home h1 { font-size: 2.5rem; }
             .section-title { font-size: 2rem; }
             #about .about-content { flex-direction: column; }
             .plan-card.popular { transform: scale(1); }
+            .stats-container {
+                gap: 30px;
+            }
+            .stat-number {
+                font-size: 2rem;
+            }
+            #home .cta-group {
+                flex-direction: column;
+                align-items: center;
+            }
+            .popup-content {
+                padding: 30px 20px;
+            }
+            .urgency-banner {
+                font-size: 0.9rem;
+            }
         }
     </style>
 </head>
 <body>
+    <!-- Urgency Banner -->
+    <div class="urgency-banner">
+        🔥 Limited Time: Free Consultation + Personalized Plan Guide - Only 15 Spots Left This Month!
+    </div>
+
+    <!-- Lead Magnet Popup -->
+    <div class="popup-overlay" id="leadPopup">
+        <div class="popup-content">
+            <button class="popup-close" onclick="closePopup()">&times;</button>
+            <h3 class="popup-title">Get Your FREE Personalized Fitness Plan!</h3>
+            <p class="popup-subtitle">Join 500+ people who transformed their bodies with science-based coaching. Get instant access to:</p>
+            <ul style="color: var(--text-secondary); margin-bottom: 25px; padding-left: 20px;">
+                <li>✅ 7-Day Meal Prep Guide</li>
+                <li>✅ No-Equipment Home Workout</li>
+                <li>✅ Body Fat Calculator</li>
+                <li>✅ Free 30-Min Consultation Call</li>
+            </ul>
+            
+            <form class="lead-form" id="leadForm" action="#" method="POST">
+                <div class="form-group">
+                    <label for="name">Full Name *</label>
+                    <input type="text" id="name" name="name" required>
+                </div>
+                <div class="form-group">
+                    <label for="email">Email Address *</label>
+                    <input type="email" id="email" name="email" required>
+                </div>
+                <div class="form-group">
+                    <label for="phone">WhatsApp Number *</label>
+                    <input type="tel" id="phone" name="phone" required>
+                </div>
+                <div class="form-group">
+                    <label for="goal">Primary Fitness Goal</label>
+                    <select id="goal" name="goal">
+                        <option value="">Select your goal</option>
+                        <option value="weight-loss">Weight Loss</option>
+                        <option value="muscle-gain">Muscle Gain</option>
+                        <option value="general-fitness">General Fitness</option>
+                        <option value="strength">Build Strength</option>
+                        <option value="endurance">Improve Endurance</option>
+                    </select>
+                </div>
+                <button type="submit" class="submit-btn" id="submitBtn">
+                    Get My FREE Plan + Consultation 🚀
+                </button>
+            </form>
+            <p style="font-size: 0.8rem; color: var(--text-secondary); text-align: center; margin-top: 15px;">
+                No spam. Unsubscribe anytime. Your data is 100% secure.
+            </p>
+        </div>
+    </div>
 
     <nav>
         <div class="container">
-            <a href="#home" class="logo"><img src="https://i.ibb.co/7NVcPrpq/Adobe-Express-file.png" alt="Unlock My Fitness Logo"></a>
+            <a href="#home" class="logo"><img src="https://i.ibb.co/tpqrmRM/Chat-GPT-Image-Jul-20-2025-01-35-22-AM-removebg-preview.png" alt="Unlock My Fitness Logo"></a>
             <ul>
                 <li><a href="#how-it-works">How It Works</a></li>
                 <li><a href="#plans">Plans</a></li>
                 <li><a href="#results">Results</a></li>
                 <li><a href="#about">About</a></li>
-                <li><a href="#contact" class="cta-button">Get Started</a></li>
+                <li><a href="#contact" class="cta-button" onclick="showPopup()">Get Started</a></li>
             </ul>
         </div>
     </nav>
+
+    <!-- Stats Bar -->
+    <div class="stats-bar">
+        <div class="container">
+            <div class="stats-container">
+                <div class="stat-item">
+                    <div class="stat-number" id="clientsCount">500+</div>
+                    <div class="stat-label">Clients Transformed</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number">4.9★</div>
+                    <div class="stat-label">Average Rating</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number">95%</div>
+                    <div class="stat-label">Success Rate</div>
+                </div>
+            </div>
+        </div>
+    </div>
 
     <section id="home">
         <div class="container">
             <h1>Tired of Fad Diets? <br>Unlock Your Potential. <span>For Life.</span></h1>
             <p class="tagline">We don't just tell you what to do — we teach you why it works. Sustainable fitness through science, not shortcuts.</p>
             <div class="cta-group">
-                <a href="#contact" class="cta-button">Start Your Free Consultation</a>
+                <button class="cta-button" onclick="showPopup()">Get FREE Consultation + Plan</button>
+                <a href="#results" class="cta-button secondary-cta">See Success Stories</a>
             </div>
         </div>
     </section>
@@ -354,12 +617,13 @@
                         <li>Custom Workout Routine</li>
                         <li>Weekly Progress Check-ins</li>
                         <li>WhatsApp Support</li>
+                        <li>30-Day Money Back Guarantee</li>
                     </ul>
-                    <a href="#contact" class="cta-button">Select Plan</a>
+                    <button class="cta-button" onclick="showPopup(); trackEvent('plan_interest', 'kickstarter')">Select Plan</button>
                 </div>
                 <div class="plan-card popular">
                     <h3>Transformation</h3>
-                    <p class="price">₹24,999 <span>Best Value</span></p>
+                    <p class="price">₹24,999 <span>Most Popular</span></p>
                      <ul>
                         <li>6-Month Program</li>
                         <li>Personalised Nutrition Plan</li>
@@ -367,8 +631,9 @@
                         <li>Weekly Progress Check-ins</li>
                         <li>Priority WhatsApp Support</li>
                         <li>Dietary Flexibility Guide</li>
+                        <li>30-Day Money Back Guarantee</li>
                     </ul>
-                    <a href="#contact" class="cta-button">Select Plan</a>
+                    <button class="cta-button" onclick="showPopup(); trackEvent('plan_interest', 'transformation')">Select Plan</button>
                 </div>
                 <div class="plan-card">
                     <h3>Lifestyle</h3>
@@ -379,8 +644,9 @@
                         <li>Bi-Weekly Review Calls</li>
                         <li>Advanced Habit Coaching</li>
                         <li>Long-term Maintenance Plan</li>
+                        <li>30-Day Money Back Guarantee</li>
                     </ul>
-                    <a href="#contact" class="cta-button">Select Plan</a>
+                    <button class="cta-button" onclick="showPopup(); trackEvent('plan_interest', 'lifestyle')">Select Plan</button>
                 </div>
             </div>
         </div>
@@ -430,6 +696,8 @@
                 <h2 class="section-title" style="text-align: left; margin-bottom: 20px;">Meet <span>Your Coach</span></h2>
                 <p>Hi, I'm Abhist. As a certified fitness coach and a full-time software engineer, I understand the challenges of balancing a demanding career with health goals. My approach is rooted in science, efficiency, and empathy.</p><br>
                 <p>I started 'Unlock My Fitness' to cut through the noise of the fitness industry. My mission is to empower you with the knowledge and tools to build a healthy lifestyle that you can actually sustain, long after our coaching ends.</p>
+                <br>
+                <p style="color: var(--primary-orange); font-weight: 600;">🏆 Certified Fitness Coach | 🎓 Sports Science Background | 💻 Tech Professional</p>
             </div>
             <div class="coach-image">
                 <img src="https://i.pravatar.cc/300" alt="Coach Abhist Chauhan">
@@ -440,16 +708,9 @@
     <section id="contact">
         <div class="container">
             <h2 class="section-title">Ready to Unlock Your Potential?</h2>
-            <p style="max-width: 600px; margin: 0 auto; color: var(--text-secondary);">Your transformation is one conversation away. Send me a message on WhatsApp for a free, no-obligation consultation call. Let's build your plan.</p>
-            <a href="https://wa.me/918178695177" target="_blank" class="whatsapp-button">Chat on WhatsApp</a>
-        </div>
-    </section>
-    
-    <footer>
-        <div class="container">
-            <p>&copy; 2025 Unlock My Fitness. All Rights Reserved.</p>
-        </div>
-    </footer>
-
-</body>
-</html>
+            <p style="max-width: 600px; margin: 0 auto; color: var(--text-secondary);">Your transformation is one conversation away. Get your free consultation and personalized plan guide - no obligations, just results.</p>
+            <div style="margin-top: 30px;">
+                <button class="cta-button" onclick="showPopup()" style="margin-right: 15px; font-size: 1.2rem; padding: 15px 35px;">
+                    Get FREE Plan + Consultation
+                </button>
+                <a href="https://wa.me/918178695177" target="_blank" class
